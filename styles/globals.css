@@ -1,0 +1,286 @@
+/* =========================================================
+   DevForge — Global Stylesheet
+   Design system foundation: variables, resets, base styles
+   ========================================================= */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────
+   1. CSS CUSTOM PROPERTIES — Design Tokens
+   ───────────────────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --color-brand:        #0A2540;
+  --color-accent:       #7B61FF;
+  --color-glow:         #00C2FF;
+  --color-accent-hover: #6347f5;
+
+  /* Surfaces (Light mode — minimal use, primarily dark) */
+  --color-bg:           #f8fafc;
+  --color-surface:      #ffffff;
+  --color-surface-card: #f1f5f9;
+  --color-border:       #e2e8f0;
+  --color-text:         #0f172a;
+  --color-text-muted:   #64748b;
+
+  /* UI */
+  --radius-sm:  0.5rem;
+  --radius-md:  0.75rem;
+  --radius-lg:  1rem;
+  --radius-xl:  1.5rem;
+  --radius-2xl: 2rem;
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+  --shadow-glow: 0 0 24px rgba(123, 97, 255, 0.2);
+
+  /* Transitions */
+  --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:   400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode CSS variables */
+.dark {
+  --color-bg:           #0d1117;
+  --color-surface:      #161b22;
+  --color-surface-card: #21262d;
+  --color-border:       #30363d;
+  --color-text:         #e6edf3;
+  --color-text-muted:   #8b949e;
+
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.3);
+  --shadow-glow: 0 0 24px rgba(123, 97, 255, 0.35);
+}
+
+/* ─────────────────────────────────────────────────────────
+   2. BASE RESET & DEFAULTS
+   ───────────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-[var(--color-bg)] text-[var(--color-text)] font-sans;
+    min-height: 100dvh;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Remove default list styles */
+  ul, ol { list-style: none; }
+
+  /* Smooth focus rings */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Typography scale */
+  h1 { @apply font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight; }
+  h2 { @apply font-display text-3xl md:text-4xl font-bold leading-tight tracking-tight; }
+  h3 { @apply font-display text-2xl md:text-3xl font-semibold leading-snug; }
+  h4 { @apply font-display text-xl md:text-2xl font-semibold leading-snug; }
+  h5 { @apply font-sans text-lg font-semibold; }
+  h6 { @apply font-sans text-base font-semibold; }
+
+  p  { @apply text-base leading-relaxed; }
+
+  code:not(pre code) {
+    @apply font-mono text-sm bg-surface-raised text-accent px-1.5 py-0.5 rounded-md;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar        { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track  { background: transparent; }
+  ::-webkit-scrollbar-thumb  { @apply bg-surface-border rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-surface-muted; }
+}
+
+/* ─────────────────────────────────────────────────────────
+   3. COMPONENT LAYER — Reusable utility classes
+   ───────────────────────────────────────────────────────── */
+@layer components {
+
+  /* ── Glass card ── */
+  .glass-card {
+    @apply bg-surface-card/80 backdrop-blur-md border border-surface-border/50
+           shadow-glass rounded-2xl;
+  }
+
+  /* ── Gradient text ── */
+  .gradient-text {
+    @apply bg-gradient-to-r from-accent via-glow to-accent bg-clip-text text-transparent;
+    background-size: 200% auto;
+    animation: shimmer 3s linear infinite;
+  }
+
+  /* ── Glow button ── */
+  .btn-glow {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+  .btn-glow::after {
+    content: '';
+    @apply absolute inset-0 bg-accent/20 opacity-0 transition-opacity duration-300;
+  }
+  .btn-glow:hover::after { @apply opacity-100; }
+
+  /* ── Neon border ── */
+  .border-neon {
+    position: relative;
+  }
+  .border-neon::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-glow));
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+  }
+  .border-neon:hover::before { opacity: 1; }
+
+  /* ── Section container ── */
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ── Code block wrapper ── */
+  .code-block {
+    @apply relative rounded-xl overflow-hidden border border-surface-border
+           bg-surface font-mono text-sm;
+  }
+
+  /* ── Badge ── */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full
+           text-xs font-medium border;
+  }
+
+  /* ── Sidebar item ── */
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium
+           text-[var(--color-text-muted)] hover:text-[var(--color-text)]
+           hover:bg-surface-raised transition-all duration-200 cursor-pointer;
+  }
+  .sidebar-item.active {
+    @apply text-accent bg-accent/10 border border-accent/20;
+  }
+
+  /* ── Progress bar ── */
+  .progress-bar {
+    @apply h-1.5 rounded-full bg-surface-raised overflow-hidden;
+  }
+  .progress-bar-fill {
+    @apply h-full rounded-full bg-gradient-to-r from-accent to-glow
+           transition-all duration-700 ease-out;
+  }
+
+  /* ── Infographic node ── */
+  .infographic-node {
+    @apply flex flex-col items-center gap-2 cursor-pointer group;
+  }
+  .infographic-node-icon {
+    @apply w-14 h-14 rounded-2xl flex items-center justify-center
+           border border-surface-border transition-all duration-300
+           group-hover:scale-110 group-hover:shadow-glow-md;
+  }
+  .infographic-node-label {
+    @apply text-xs font-semibold text-center text-[var(--color-text-muted)]
+           group-hover:text-[var(--color-text)] transition-colors duration-200;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   4. UTILITY LAYER — One-off helpers
+   ───────────────────────────────────────────────────────── */
+@layer utilities {
+
+  /* Text balance for headings */
+  .text-balance  { text-wrap: balance; }
+  .text-pretty   { text-wrap: pretty; }
+
+  /* Animated underline */
+  .animated-underline {
+    background-image: linear-gradient(var(--color-accent), var(--color-accent));
+    background-size: 0% 2px;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    transition: background-size var(--transition-normal);
+  }
+  .animated-underline:hover { background-size: 100% 2px; }
+
+  /* Mesh background */
+  .bg-mesh {
+    background-color: #0d1117;
+    background-image:
+      radial-gradient(at 0% 0%,   rgba(10, 37, 64, 0.8)   0%, transparent 60%),
+      radial-gradient(at 100% 0%,  rgba(123, 97, 255, 0.15) 0%, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(0, 194, 255, 0.08)  0%, transparent 50%);
+  }
+
+  /* Noise texture overlay */
+  .noise-texture::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  /* Glow effects */
+  .glow-accent { box-shadow: var(--shadow-glow); }
+  .glow-text   { text-shadow: 0 0 20px rgba(123, 97, 255, 0.5); }
+  .glow-cyan   { box-shadow: 0 0 20px rgba(0, 194, 255, 0.3); }
+
+  /* Hide scrollbar but keep functionality */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+}
+
+/* ─────────────────────────────────────────────────────────
+   5. GLOBAL ANIMATIONS
+   ───────────────────────────────────────────────────────── */
+@keyframes shimmer {
+  from { background-position: 0% center; }
+  to   { background-position: 200% center; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 12px rgba(123, 97, 255, 0.3); }
+  50%       { box-shadow: 0 0 32px rgba(123, 97, 255, 0.6), 0 0 64px rgba(0, 194, 255, 0.2); }
+}
+
+@keyframes scan-line {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* ─────────────────────────────────────────────────────────
+   6. PRINT STYLES
+   ───────────────────────────────────────────────────────── */
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; color: black; }
+}

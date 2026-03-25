@@ -1,0 +1,181 @@
+// lib/constants.ts
+// ─────────────────────────────────────────────────────────
+// APPLICATION CONSTANTS
+// Central config for routes, topics, nav items
+// ─────────────────────────────────────────────────────────
+
+// ── Routes ───────────────────────────────────────────────
+export const ROUTES = {
+  home:        "/",
+  dashboard:   "/dashboard",
+  learn:       "/learn",
+  topic:       (slug: string) => `/learn/${slug}`,
+  login:       "/login",
+  signup:      "/signup",
+  settings:    "/settings",
+  profile:     "/profile",
+} as const;
+
+// ── Learning Topics — populated progressively ────────────
+export const TOPICS = [
+  {
+    id:          "html-css",
+    slug:        "html-css",
+    title:       "HTML & CSS",
+    description: "Build the visual web. Learn structure and style from scratch.",
+    icon:        "🌐",
+    color:       "#E34F26",
+    gradient:    "from-orange-500/20 to-orange-600/5",
+    difficulty:  "beginner" as const,
+    modules:     12,
+    duration:    "8 hours",
+    category:    "frontend",
+  },
+  {
+    id:          "javascript",
+    slug:        "javascript",
+    title:       "JavaScript",
+    description: "Master the language of the web. From basics to async mastery.",
+    icon:        "⚡",
+    color:       "#F7DF1E",
+    gradient:    "from-yellow-400/20 to-yellow-500/5",
+    difficulty:  "beginner" as const,
+    modules:     20,
+    duration:    "16 hours",
+    category:    "frontend",
+  },
+  {
+    id:          "react",
+    slug:        "react",
+    title:       "React",
+    description: "Component-driven UI development with hooks, state, and virtual DOM.",
+    icon:        "⚛️",
+    color:       "#61DAFB",
+    gradient:    "from-cyan-400/20 to-cyan-500/5",
+    difficulty:  "intermediate" as const,
+    modules:     18,
+    duration:    "14 hours",
+    category:    "frontend",
+  },
+  {
+    id:          "nextjs",
+    slug:        "nextjs",
+    title:       "Next.js",
+    description: "Full-stack React framework. App Router, RSC, and deployment.",
+    icon:        "▲",
+    color:       "#FFFFFF",
+    gradient:    "from-white/10 to-white/5",
+    difficulty:  "intermediate" as const,
+    modules:     15,
+    duration:    "12 hours",
+    category:    "fullstack",
+  },
+  {
+    id:          "nodejs",
+    slug:        "nodejs",
+    title:       "Node.js",
+    description: "Server-side JavaScript. APIs, file system, and event loop.",
+    icon:        "🟢",
+    color:       "#339933",
+    gradient:    "from-green-500/20 to-green-600/5",
+    difficulty:  "intermediate" as const,
+    modules:     14,
+    duration:    "10 hours",
+    category:    "backend",
+  },
+  {
+    id:          "typescript",
+    slug:        "typescript",
+    title:       "TypeScript",
+    description: "Typed JavaScript at any scale. Types, generics, and strict mode.",
+    icon:        "🔷",
+    color:       "#3178C6",
+    gradient:    "from-blue-500/20 to-blue-600/5",
+    difficulty:  "intermediate" as const,
+    modules:     12,
+    duration:    "9 hours",
+    category:    "language",
+  },
+  {
+    id:          "databases",
+    slug:        "databases",
+    title:       "Databases",
+    description: "PostgreSQL, ORMs, data modeling, and query optimization.",
+    icon:        "🗄️",
+    color:       "#336791",
+    gradient:    "from-indigo-500/20 to-indigo-600/5",
+    difficulty:  "intermediate" as const,
+    modules:     10,
+    duration:    "8 hours",
+    category:    "backend",
+  },
+  {
+    id:          "auth",
+    slug:        "auth",
+    title:       "Authentication",
+    description: "JWT, sessions, OAuth, and security best practices.",
+    icon:        "🔐",
+    color:       "#7B61FF",
+    gradient:    "from-accent/20 to-accent/5",
+    difficulty:  "advanced" as const,
+    modules:     8,
+    duration:    "6 hours",
+    category:    "security",
+  },
+  {
+    id:          "system-design",
+    slug:        "system-design",
+    title:       "System Design",
+    description: "Scalable architecture, load balancing, caching, and microservices.",
+    icon:        "🏗️",
+    color:       "#00C2FF",
+    gradient:    "from-glow/20 to-glow/5",
+    difficulty:  "advanced" as const,
+    modules:     10,
+    duration:    "10 hours",
+    category:    "architecture",
+  },
+  {
+    id:          "devops",
+    slug:        "devops",
+    title:       "DevOps & CI/CD",
+    description: "Docker, GitHub Actions, Vercel deployment, and monitoring.",
+    icon:        "🚀",
+    color:       "#FF6B6B",
+    gradient:    "from-red-400/20 to-red-500/5",
+    difficulty:  "advanced" as const,
+    modules:     9,
+    duration:    "8 hours",
+    category:    "devops",
+  },
+] as const;
+
+// ── Navigation Items ─────────────────────────────────────
+export const NAV_ITEMS = [
+  { label: "Dashboard",   href: "/dashboard",  icon: "LayoutDashboard" },
+  { label: "Learn",       href: "/learn",      icon: "BookOpen"        },
+  { label: "Roadmap",     href: "/roadmap",    icon: "Map"             },
+  { label: "Challenges",  href: "/challenges", icon: "Code2"           },
+  { label: "Projects",    href: "/projects",   icon: "FolderKanban"    },
+  { label: "Community",   href: "/community",  icon: "Users"           },
+] as const;
+
+// ── Topic Categories ─────────────────────────────────────
+export const CATEGORIES = [
+  { id: "all",          label: "All Topics"  },
+  { id: "frontend",     label: "Frontend"    },
+  { id: "backend",      label: "Backend"     },
+  { id: "fullstack",    label: "Full Stack"  },
+  { id: "language",     label: "Languages"   },
+  { id: "architecture", label: "Architecture"},
+  { id: "security",     label: "Security"    },
+  { id: "devops",       label: "DevOps"      },
+] as const;
+
+// ── Platform Stats ────────────────────────────────────────
+export const PLATFORM_STATS = [
+  { value: "50+",    label: "Modules"         },
+  { value: "200+",   label: "Lessons"         },
+  { value: "10,000+",label: "Developers"      },
+  { value: "4.9★",   label: "Average Rating"  },
+] as const;
