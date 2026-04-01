@@ -22,7 +22,11 @@ const spacingMap = {
 
 export const Section = forwardRef<HTMLElement, SectionProps>(
   ({ className, as: Tag = "section", spacing = "lg", ...props }, ref) => (
-    <Tag ref={ref} className={cn(spacingMap[spacing], className)} {...props} />
+    <Tag
+      ref={ref as React.Ref<HTMLElement>}
+      className={cn(spacingMap[spacing], className)}
+      {...props}
+    />
   ),
 );
 Section.displayName = "Section";
