@@ -1,13 +1,29 @@
-// app/(dashboard)/dashboard/page.tsx
-// Placeholder — full dashboard built in Phase 4
+"use client";
+// app/(dashboard)/dashboard/page.tsx — Phase 4
+
+import { DashboardHero }    from "@/components/dashboard/DashboardHero";
+import { StatsStrip }       from "@/components/dashboard/StatsStrip";
+import { ContinueLearning } from "@/components/dashboard/ContinueLearning";
+import { AllTopicsGrid }    from "@/components/dashboard/AllTopicsGrid";
+import { DailyPath }        from "@/components/dashboard/DailyPath";
+import { ActivityFeed }     from "@/components/dashboard/ActivityFeed";
+import { Achievements }     from "@/components/dashboard/Achievements";
+import { Container }        from "@/components/ui/Container";
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-dvh bg-mesh flex items-center justify-center">
-      <div className="glass-card p-8 text-center">
-        <h1 className="font-display text-2xl font-bold mb-2">Dashboard</h1>
-        <p className="text-[var(--color-text-muted)]">Coming in Phase 4</p>
+    <Container className="py-6 space-y-8">
+      <DashboardHero />
+      <StatsStrip />
+      <ContinueLearning />
+      <AllTopicsGrid />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
+          <DailyPath />
+          <ActivityFeed />
+        </div>
+        <div><Achievements /></div>
       </div>
-    </div>
+    </Container>
   );
 }

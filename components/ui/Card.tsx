@@ -84,7 +84,7 @@ export interface CardProps
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant, padding, hover, as: Tag = "div", ...props }, ref) => (
     <Tag
-      ref={ref as any}
+      ref={ref as React.Ref<HTMLDivElement>}
       className={cn(cardVariants({ variant, padding, hover }), className)}
       {...props}
     />

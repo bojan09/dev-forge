@@ -1,9 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // Enable dark mode via class strategy
   darkMode: ["class"],
 
-  // Scan all source files for class names
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -16,7 +14,6 @@ module.exports = {
       // DESIGN TOKENS — Brand Colors
       // ─────────────────────────────────────────────
       colors: {
-        // Primary brand palette
         brand: {
           DEFAULT: "#0A2540",
           50:  "#e8f0f9",
@@ -34,6 +31,7 @@ module.exports = {
         // Accent — electric purple
         accent: {
           DEFAULT: "#7B61FF",
+          hover:   "#6347f5",
           50:  "#f0edff",
           100: "#d9d1ff",
           200: "#bfb2ff",
@@ -59,7 +57,7 @@ module.exports = {
           800: "#007394",
           900: "#005970",
         },
-        // Semantic surface colors (dark theme first)
+        // Semantic surface colors (dark theme)
         surface: {
           DEFAULT: "#0d1117",
           card:    "#161b22",
@@ -70,19 +68,16 @@ module.exports = {
       },
 
       // ─────────────────────────────────────────────
-      // TYPOGRAPHY — Distinctive font pairing
+      // TYPOGRAPHY
       // ─────────────────────────────────────────────
       fontFamily: {
-        // Display: Syne — geometric, architectural
         display: ["var(--font-syne)", "system-ui", "sans-serif"],
-        // Body: DM Sans — clean, modern, readable
         sans:    ["var(--font-dm-sans)", "system-ui", "sans-serif"],
-        // Code: JetBrains Mono — developer staple
         mono:    ["var(--font-jetbrains)", "Consolas", "monospace"],
       },
 
       // ─────────────────────────────────────────────
-      // SPACING — Extended scale
+      // SPACING
       // ─────────────────────────────────────────────
       spacing: {
         "4.5": "1.125rem",
@@ -123,6 +118,10 @@ module.exports = {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%":      { transform: "translateY(-6px)" },
         },
+        "pulse-dot": {
+          "0%, 100%": { opacity: "1" },
+          "50%":      { opacity: "0.4" },
+        },
       },
       animation: {
         "fade-in":       "fade-in 0.4s ease-out forwards",
@@ -131,6 +130,7 @@ module.exports = {
         "glow-pulse":    "glow-pulse 2s ease-in-out infinite",
         "shimmer":       "shimmer 2s linear infinite",
         "float":         "float 3s ease-in-out infinite",
+        "pulse-dot":     "pulse-dot 1.5s ease-in-out infinite",
       },
 
       // ─────────────────────────────────────────────
@@ -144,7 +144,7 @@ module.exports = {
       },
 
       // ─────────────────────────────────────────────
-      // BOX SHADOWS — Glassmorphism + glow effects
+      // BOX SHADOWS
       // ─────────────────────────────────────────────
       boxShadow: {
         "glass":      "0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05)",
@@ -158,26 +158,31 @@ module.exports = {
       },
 
       // ─────────────────────────────────────────────
-      // BACKDROP BLUR — Glassmorphism
+      // BACKDROP BLUR
       // ─────────────────────────────────────────────
       backdropBlur: {
         xs: "2px",
       },
 
       // ─────────────────────────────────────────────
-      // BACKGROUND IMAGE — Gradients & meshes
+      // BACKGROUND IMAGES
       // ─────────────────────────────────────────────
       backgroundImage: {
-        "gradient-radial":      "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":       "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "mesh-brand":           "radial-gradient(at 0% 0%, #0A2540 0, transparent 50%), radial-gradient(at 100% 0%, #7B61FF22 0, transparent 50%), radial-gradient(at 100% 100%, #00C2FF11 0, transparent 50%)",
-        "shimmer-gradient":     "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)",
-        "card-gradient":        "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)",
+        "gradient-radial":   "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":    "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "mesh-brand":        "radial-gradient(at 0% 0%, #0A2540 0, transparent 50%), radial-gradient(at 100% 0%, #7B61FF22 0, transparent 50%), radial-gradient(at 100% 100%, #00C2FF11 0, transparent 50%)",
+        "shimmer-gradient":  "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)",
+        "card-gradient":     "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)",
+      },
+
+      // ─────────────────────────────────────────────
+      // TRANSITIONS
+      // ─────────────────────────────────────────────
+      transitionDuration: {
+        "400": "400ms",
       },
     },
   },
 
-  plugins: [
-    // No external plugins required — all animations defined inline above
-  ],
+  plugins: [],
 };

@@ -76,7 +76,7 @@ const buttonVariants = cva(
         link: [
           "text-accent underline-offset-4",
           "hover:underline",
-          "h-auto! px-0! py-0!",
+          "!h-auto !px-0 !py-0",
         ],
       },
       size: {

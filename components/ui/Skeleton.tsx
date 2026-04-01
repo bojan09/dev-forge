@@ -1,10 +1,24 @@
 // components/ui/Skeleton.tsx
-// ─────────────────────────────────────────────────────────
-// SKELETON LOADING COMPONENT
-// Shimmer placeholders for async content
-// ─────────────────────────────────────────────────────────
+// Shimmer loading placeholders for async content
 
 import { cn } from "@/lib/utils";
+
+function SkeletonBase({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn(
+        "relative overflow-hidden bg-surface-raised rounded-lg",
+        className
+      )}
+      style={{
+        backgroundImage: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%)",
+        backgroundSize: "200% 100%",
+        animation: "shimmer 1.8s linear infinite",
+      }}
+      {...props}
+    />
+  );
+}
 
 export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   lines?: number;
@@ -12,30 +26,8 @@ export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   height?: string;
 }
 
-function SkeletonBase({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cn(
-        "relative overflow-hidden",
-        "bg-surface-raised rounded-lg",
-        "before:absolute before:inset-0",
-        "before:bg-gradient-to-r before:from-transparent before:via-white/5 before:to-transparent",
-        "before:bg-[length:200%_100%]",
-        "before:animate-shimmer",
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
-export function Skeleton({ className, lines, height, rounded = "md", ...props }: SkeletonProps) {
-  const roundedMap = {
-    sm:   "rounded",
-    md:   "rounded-lg",
-    lg:   "rounded-xl",
-    full: "rounded-full",
-  };
+export function Skeleton({ className, lines, rounded = "md", ...props }: SkeletonProps) {
+  const roundedMap = { sm: "rounded", md: "rounded-lg", lg: "rounded-xl", full: "rounded-full" };
 
   if (lines && lines > 1) {
     return (
@@ -43,7 +35,12 @@ export function Skeleton({ className, lines, height, rounded = "md", ...props }:
         {Array.from({ length: lines }).map((_, i) => (
           <SkeletonBase
             key={i}
-            style={{ width: i === lines - 1 ? "65%" : "100%" }}
+            style={{
+              width: i === lines - 1 ? "65%" : "100%",
+              backgroundImage: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%)",
+              backgroundSize: "200% 100%",
+              animation: "shimmer 1.8s linear infinite",
+            }}
             className={cn("h-4", roundedMap[rounded])}
           />
         ))}
@@ -51,17 +48,9 @@ export function Skeleton({ className, lines, height, rounded = "md", ...props }:
     );
   }
 
-  return (
-    <SkeletonBase
-      className={cn(height ?? "h-4", roundedMap[rounded], className)}
-      {...props}
-    />
-  );
+  return <SkeletonBase className={cn("h-4", roundedMap[rounded], className)} {...props} />;
 }
 
-// ── Compound skeletons for common UI patterns ─────────────
-
-// Card skeleton
 export function CardSkeleton() {
   return (
     <div className="rounded-2xl border border-surface-border bg-surface-card p-6 space-y-4">
@@ -81,7 +70,6 @@ export function CardSkeleton() {
   );
 }
 
-// Lesson row skeleton
 export function LessonSkeleton() {
   return (
     <div className="flex items-center gap-4 py-3 px-4 rounded-xl border border-surface-border">

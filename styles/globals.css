@@ -11,13 +11,12 @@
    1. CSS CUSTOM PROPERTIES — Design Tokens
    ───────────────────────────────────────────────────────── */
 :root {
-  /* Brand */
   --color-brand:        #0A2540;
   --color-accent:       #7B61FF;
-  --color-glow:         #00C2FF;
   --color-accent-hover: #6347f5;
+  --color-glow:         #00C2FF;
 
-  /* Surfaces (Light mode — minimal use, primarily dark) */
+  /* Light mode surfaces */
   --color-bg:           #f8fafc;
   --color-surface:      #ffffff;
   --color-surface-card: #f1f5f9;
@@ -25,18 +24,15 @@
   --color-text:         #0f172a;
   --color-text-muted:   #64748b;
 
-  /* UI */
   --radius-sm:  0.5rem;
   --radius-md:  0.75rem;
   --radius-lg:  1rem;
   --radius-xl:  1.5rem;
   --radius-2xl: 2rem;
 
-  /* Shadows */
   --shadow-card: 0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
   --shadow-glow: 0 0 24px rgba(123, 97, 255, 0.2);
 
-  /* Transitions */
   --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow:   400ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -71,146 +67,113 @@
   }
 
   body {
-    @apply bg-[var(--color-bg)] text-[var(--color-text)] font-sans;
+    background-color: var(--color-bg);
+    color: var(--color-text);
     min-height: 100dvh;
     line-height: 1.6;
     overflow-x: hidden;
+    font-family: var(--font-dm-sans), system-ui, sans-serif;
   }
 
-  /* Remove default list styles */
   ul, ol { list-style: none; }
 
-  /* Smooth focus rings */
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
     border-radius: var(--radius-sm);
   }
 
-  /* Typography scale */
-  h1 { @apply font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight; }
-  h2 { @apply font-display text-3xl md:text-4xl font-bold leading-tight tracking-tight; }
-  h3 { @apply font-display text-2xl md:text-3xl font-semibold leading-snug; }
-  h4 { @apply font-display text-xl md:text-2xl font-semibold leading-snug; }
-  h5 { @apply font-sans text-lg font-semibold; }
-  h6 { @apply font-sans text-base font-semibold; }
-
-  p  { @apply text-base leading-relaxed; }
+  h1 { font-size: clamp(2rem, 5vw, 3.75rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; font-family: var(--font-syne), system-ui, sans-serif; }
+  h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; line-height: 1.2; letter-spacing: -0.015em; font-family: var(--font-syne), system-ui, sans-serif; }
+  h3 { font-size: clamp(1.25rem, 2vw, 1.75rem); font-weight: 600; line-height: 1.3; font-family: var(--font-syne), system-ui, sans-serif; }
+  h4 { font-size: 1.25rem; font-weight: 600; line-height: 1.4; font-family: var(--font-syne), system-ui, sans-serif; }
+  p  { line-height: 1.7; }
 
   code:not(pre code) {
-    @apply font-mono text-sm bg-surface-raised text-accent px-1.5 py-0.5 rounded-md;
+    font-family: var(--font-jetbrains), Consolas, monospace;
+    font-size: 0.875em;
+    background: #21262d;
+    color: #7B61FF;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.375rem;
   }
 
-  /* Custom scrollbar */
   ::-webkit-scrollbar        { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track  { background: transparent; }
-  ::-webkit-scrollbar-thumb  { @apply bg-surface-border rounded-full; }
-  ::-webkit-scrollbar-thumb:hover { @apply bg-surface-muted; }
+  ::-webkit-scrollbar-thumb  { background: #30363d; border-radius: 9999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #8b949e; }
 }
 
 /* ─────────────────────────────────────────────────────────
-   3. COMPONENT LAYER — Reusable utility classes
+   3. COMPONENT LAYER
    ───────────────────────────────────────────────────────── */
 @layer components {
 
-  /* ── Glass card ── */
+  /* Glass card */
   .glass-card {
-    @apply bg-surface-card/80 backdrop-blur-md border border-surface-border/50
-           shadow-glass rounded-2xl;
+    background: rgba(22, 27, 34, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(48, 54, 61, 0.6);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+    border-radius: 1rem;
   }
 
-  /* ── Gradient text ── */
+  /* Gradient text */
   .gradient-text {
-    @apply bg-gradient-to-r from-accent via-glow to-accent bg-clip-text text-transparent;
-    background-size: 200% auto;
-    animation: shimmer 3s linear infinite;
+    background: linear-gradient(135deg, #7B61FF 0%, #00C2FF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
   }
 
-  /* ── Glow button ── */
-  .btn-glow {
-    @apply relative overflow-hidden transition-all duration-300;
-  }
-  .btn-glow::after {
-    content: '';
-    @apply absolute inset-0 bg-accent/20 opacity-0 transition-opacity duration-300;
-  }
-  .btn-glow:hover::after { @apply opacity-100; }
-
-  /* ── Neon border ── */
-  .border-neon {
-    position: relative;
-  }
-  .border-neon::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    background: linear-gradient(135deg, var(--color-accent), var(--color-glow));
-    border-radius: inherit;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity var(--transition-normal);
-  }
-  .border-neon:hover::before { opacity: 1; }
-
-  /* ── Section container ── */
+  /* Section container */
   .section-container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  @media (min-width: 640px) {
+    .section-container { padding-left: 1.5rem; padding-right: 1.5rem; }
+  }
+  @media (min-width: 1024px) {
+    .section-container { padding-left: 2rem; padding-right: 2rem; }
   }
 
-  /* ── Code block wrapper ── */
-  .code-block {
-    @apply relative rounded-xl overflow-hidden border border-surface-border
-           bg-surface font-mono text-sm;
-  }
-
-  /* ── Badge ── */
-  .badge {
-    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full
-           text-xs font-medium border;
-  }
-
-  /* ── Sidebar item ── */
+  /* Sidebar nav item */
   .sidebar-item {
-    @apply flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium
-           text-[var(--color-text-muted)] hover:text-[var(--color-text)]
-           hover:bg-surface-raised transition-all duration-200 cursor-pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.625rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .sidebar-item:hover {
+    color: var(--color-text);
+    background: #21262d;
   }
   .sidebar-item.active {
-    @apply text-accent bg-accent/10 border border-accent/20;
+    color: #7B61FF;
+    background: rgba(123, 97, 255, 0.1);
+    border: 1px solid rgba(123, 97, 255, 0.2);
   }
 
-  /* ── Progress bar ── */
-  .progress-bar {
-    @apply h-1.5 rounded-full bg-surface-raised overflow-hidden;
-  }
+  /* Progress bar */
+  .progress-bar { height: 6px; border-radius: 9999px; background: #21262d; overflow: hidden; }
   .progress-bar-fill {
-    @apply h-full rounded-full bg-gradient-to-r from-accent to-glow
-           transition-all duration-700 ease-out;
+    height: 100%;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, #7B61FF, #00C2FF);
+    transition: width 0.7s ease-out;
   }
-
-  /* ── Infographic node ── */
-  .infographic-node {
-    @apply flex flex-col items-center gap-2 cursor-pointer group;
-  }
-  .infographic-node-icon {
-    @apply w-14 h-14 rounded-2xl flex items-center justify-center
-           border border-surface-border transition-all duration-300
-           group-hover:scale-110 group-hover:shadow-glow-md;
-  }
-  .infographic-node-label {
-    @apply text-xs font-semibold text-center text-[var(--color-text-muted)]
-           group-hover:text-[var(--color-text)] transition-colors duration-200;
-  }
-}
-
-/* ─────────────────────────────────────────────────────────
-   4. UTILITY LAYER — One-off helpers
-   ───────────────────────────────────────────────────────── */
-@layer utilities {
-
-  /* Text balance for headings */
-  .text-balance  { text-wrap: balance; }
-  .text-pretty   { text-wrap: pretty; }
 
   /* Animated underline */
   .animated-underline {
@@ -221,45 +184,42 @@
     transition: background-size var(--transition-normal);
   }
   .animated-underline:hover { background-size: 100% 2px; }
+}
 
-  /* Mesh background */
+/* ─────────────────────────────────────────────────────────
+   4. UTILITY LAYER
+   ───────────────────────────────────────────────────────── */
+@layer utilities {
+
+  /* Mesh background — used on body/page backgrounds */
   .bg-mesh {
     background-color: #0d1117;
     background-image:
-      radial-gradient(at 0% 0%,   rgba(10, 37, 64, 0.8)   0%, transparent 60%),
-      radial-gradient(at 100% 0%,  rgba(123, 97, 255, 0.15) 0%, transparent 50%),
-      radial-gradient(at 50% 100%, rgba(0, 194, 255, 0.08)  0%, transparent 50%);
+      radial-gradient(at 0% 0%,   rgba(10, 37, 64, 0.9)    0%, transparent 60%),
+      radial-gradient(at 100% 0%,  rgba(123, 97, 255, 0.12) 0%, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(0, 194, 255, 0.06)  0%, transparent 50%);
   }
-
-  /* Noise texture overlay */
-  .noise-texture::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    pointer-events: none;
-  }
-
-  /* Glow effects */
-  .glow-accent { box-shadow: var(--shadow-glow); }
-  .glow-text   { text-shadow: 0 0 20px rgba(123, 97, 255, 0.5); }
-  .glow-cyan   { box-shadow: 0 0 20px rgba(0, 194, 255, 0.3); }
 
   /* Hide scrollbar but keep functionality */
-  .no-scrollbar {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
+  .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
+
+  /* Glow utilities */
+  .glow-accent { box-shadow: 0 0 24px rgba(123, 97, 255, 0.35); }
+  .glow-cyan   { box-shadow: 0 0 24px rgba(0, 194, 255, 0.35); }
+  .glow-text   { text-shadow: 0 0 20px rgba(123, 97, 255, 0.5); }
+
+  /* Text balance */
+  .text-balance { text-wrap: balance; }
+  .text-pretty  { text-wrap: pretty; }
 }
 
 /* ─────────────────────────────────────────────────────────
    5. GLOBAL ANIMATIONS
    ───────────────────────────────────────────────────────── */
 @keyframes shimmer {
-  from { background-position: 0% center; }
-  to   { background-position: 200% center; }
+  from { background-position: 200% center; }
+  to   { background-position: -200% center; }
 }
 
 @keyframes float {
@@ -272,13 +232,13 @@
   50%       { box-shadow: 0 0 32px rgba(123, 97, 255, 0.6), 0 0 64px rgba(0, 194, 255, 0.2); }
 }
 
-@keyframes scan-line {
-  0%   { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ─────────────────────────────────────────────────────────
-   6. PRINT STYLES
+   6. PRINT
    ───────────────────────────────────────────────────────── */
 @media print {
   .no-print { display: none !important; }
