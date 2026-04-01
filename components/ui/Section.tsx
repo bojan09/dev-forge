@@ -22,12 +22,8 @@ const spacingMap = {
 
 export const Section = forwardRef<HTMLElement, SectionProps>(
   ({ className, as: Tag = "section", spacing = "lg", ...props }, ref) => (
-    <Tag
-      ref={ref as React.Ref<HTMLElement>}
-      className={cn(spacingMap[spacing], className)}
-      {...props}
-    />
-  )
+    <Tag ref={ref} className={cn(spacingMap[spacing], className)} {...props} />
+  ),
 );
 Section.displayName = "Section";
 
@@ -47,13 +43,15 @@ export function SectionHeader({
   className,
 }: SectionHeaderProps) {
   const alignMap = {
-    left:   "items-start text-left",
+    left: "items-start text-left",
     center: "items-center text-center",
-    right:  "items-end text-right",
+    right: "items-end text-right",
   };
 
   return (
-    <div className={cn("flex flex-col gap-3 mb-10", alignMap[align], className)}>
+    <div
+      className={cn("flex flex-col gap-3 mb-10", alignMap[align], className)}
+    >
       {eyebrow && (
         <span className="text-xs font-semibold uppercase tracking-[0.15em] text-accent">
           {eyebrow}
