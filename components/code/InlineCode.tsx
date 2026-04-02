@@ -11,7 +11,7 @@
 import { useState, useCallback } from "react";
 import { Copy, Check, Terminal } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn }              from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { copyToClipboard } from "@/lib/utils";
 
 // ── InlineCode — styled <code> replacement ───────────────
@@ -28,7 +28,7 @@ export function InlineCode({
         "font-mono text-[0.875em] px-1.5 py-0.5 rounded-md",
         "bg-surface-raised border border-surface-border",
         "text-accent",
-        className
+        className,
       )}
     >
       {children}
@@ -41,7 +41,7 @@ export interface CodeSnippetProps {
   code: string;
   label?: string;
   language?: string;
-  isCommand?: boolean;  // shows $ prefix
+  isCommand?: boolean; // shows $ prefix
   className?: string;
 }
 
@@ -63,19 +63,23 @@ export function CodeSnippet({
   }, [code]);
 
   return (
-    <div className={cn(
-      "flex items-center gap-3 px-4 py-2.5 rounded-xl",
-      "bg-surface border border-surface-border",
-      "group",
-      className
-    )}>
+    <div
+      className={cn(
+        "flex items-center gap-3 px-4 py-2.5 rounded-xl",
+        "bg-surface border border-surface-border",
+        "group",
+        className,
+      )}
+    >
       {/* Icon */}
       <Terminal className="w-3.5 h-3.5 text-[var(--color-text-muted)] shrink-0" />
 
       {/* Label */}
       {label && (
         <>
-          <span className="text-xs text-[var(--color-text-muted)] shrink-0">{label}</span>
+          <span className="text-xs text-[var(--color-text-muted)] shrink-0">
+            {label}
+          </span>
           <div className="w-px h-4 bg-surface-border shrink-0" />
         </>
       )}
@@ -96,11 +100,21 @@ export function CodeSnippet({
       >
         <AnimatePresence mode="wait">
           {copied ? (
-            <motion.span key="check" initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }}>
+            <motion.span
+              key="check"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+            >
               <Check className="w-3.5 h-3.5 text-emerald-400" />
             </motion.span>
           ) : (
-            <motion.span key="copy" initial={{ scale: 0.8 }} animate={{ scale: 1 }} exit={{ scale: 0.8 }}>
+            <motion.span
+              key="copy"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+            >
               <Copy className="w-3.5 h-3.5" />
             </motion.span>
           )}
