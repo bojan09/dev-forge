@@ -53,6 +53,7 @@ const NAV_GROUPS = [
     items: [
       { label: "Infographics",href: "/infographics",icon: BarChart2 },
       { label: "Code System",  href: "/code-system",  icon: Code2     },
+      { label: "Animations",   href: "/animations",  icon: Zap       },
       { label: "Community",  href: "/community",  icon: Users    },
     ],
   },
