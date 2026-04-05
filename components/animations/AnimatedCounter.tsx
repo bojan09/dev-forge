@@ -1,18 +1,8 @@
 "use client";
 
 // components/animations/AnimatedCounter.tsx
-// ─────────────────────────────────────────────────────────
-// ANIMATED COUNTER
-// Counts up from 0 to a target number when it enters the viewport.
-// Used in stats strips, hero sections, achievement counters.
-//
-// Usage:
-//   <AnimatedCounter value={2450} suffix=" XP" />
-//   <AnimatedCounter value={78} suffix="%" decimals={0} />
-//   <AnimatedCounter value={4.9} prefix="★ " decimals={1} />
-// ─────────────────────────────────────────────────────────
-
-"use client";
+// Fixed: removed duplicate "use client" directive (was causing webpack crash)
+// Fixed: useInView ref typed correctly for framer-motion v11
 
 import { useEffect, useRef, useState } from "react";
 import { useInView }                   from "framer-motion";
@@ -29,27 +19,27 @@ export interface AnimatedCounterProps {
   once?:      boolean;
 }
 
-// Easing function — easeOutCubic
 function easeOut(t: number): number {
   return 1 - Math.pow(1 - t, 3);
 }
 
 export function AnimatedCounter({
   value,
-  prefix     = "",
-  suffix     = "",
-  decimals   = 0,
-  duration   = 1200,
-  delay      = 0,
+  prefix    = "",
+  suffix    = "",
+  decimals  = 0,
+  duration  = 1200,
+  delay     = 0,
   className,
-  once       = true,
+  once      = true,
 }: AnimatedCounterProps) {
   const [displayed, setDisplayed] = useState<number>(0);
-  const ref                       = useRef<HTMLSpanElement>(null);
-  const inView                    = useInView(ref, { once });
-  const startRef                  = useRef<number | null>(null);
-  const rafRef                    = useRef<number>(0);
-  const hasAnimated               = useRef(false);
+  const ref        = useRef<HTMLSpanElement>(null);
+  // framer-motion v11: useInView accepts RefObject<Element>
+  const inView     = useInView(ref as React.RefObject<Element>, { once });
+  const startRef   = useRef<number | null>(null);
+  const rafRef     = useRef<number>(0);
+  const hasAnimated = useRef(false);
 
   useEffect(() => {
     if (!inView) return;
@@ -57,25 +47,23 @@ export function AnimatedCounter({
 
     const timeout = setTimeout(() => {
       hasAnimated.current = true;
+      startRef.current    = null;
 
-      const animate = (timestamp: number) => {
+      const tick = (timestamp: number) => {
         if (startRef.current === null) startRef.current = timestamp;
 
         const elapsed  = timestamp - startRef.current;
         const progress = Math.min(elapsed / duration, 1);
-        const eased    = easeOut(progress);
-
-        setDisplayed(eased * value);
+        setDisplayed(easeOut(progress) * value);
 
         if (progress < 1) {
-          rafRef.current = requestAnimationFrame(animate);
+          rafRef.current = requestAnimationFrame(tick);
         } else {
-          setDisplayed(value); // snap to exact value
+          setDisplayed(value);
         }
       };
 
-      startRef.current = null;
-      rafRef.current   = requestAnimationFrame(animate);
+      rafRef.current = requestAnimationFrame(tick);
     }, delay);
 
     return () => {
@@ -84,20 +72,13 @@ export function AnimatedCounter({
     };
   }, [inView, value, duration, delay, once]);
 
-  const formatted = displayed.toFixed(decimals);
-
   return (
-    <span
-      ref={ref}
-      className={cn("tabular-nums", className)}
-      suppressHydrationWarning
-    >
-      {prefix}{formatted}{suffix}
+    <span ref={ref} className={cn("tabular-nums", className)} suppressHydrationWarning>
+      {prefix}{displayed.toFixed(decimals)}{suffix}
     </span>
   );
 }
 
-// ── Convenience: animated stat card ──────────────────────
 export function StatCounter({
   value,
   label,

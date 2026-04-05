@@ -1,73 +1,56 @@
 "use client";
 
 // components/layout/Sidebar.tsx
-// ─────────────────────────────────────────────────────────
-// SIDEBAR COMPONENT
-// Features:
-//  - Desktop: full-width ↔ icon-only rail (collapsible)
-//  - Mobile: off-canvas drawer with backdrop
-//  - Navigation groups with icons
-//  - Active route highlighting
-//  - Overall progress display
-//  - User profile section at bottom
-//  - Smooth Framer Motion transitions
-// ─────────────────────────────────────────────────────────
+// Fixed: progress/streak/XP now driven from MOCK_USER (not hardcoded)
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  LayoutDashboard,
-  BarChart2,
-  BookOpen,
-  Map,
-  Code2,
-  FolderKanban,
-  Users,
-  Settings,
-  ChevronLeft,
-  ChevronRight,
-  Zap,
-  Trophy,
-  Flame,
-  X,
+  LayoutDashboard, BookOpen, Map, Code2, FolderKanban,
+  Users, Settings, ChevronLeft, ChevronRight,
+  Zap, Trophy, Flame, X, BarChart2,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn }         from "@/lib/utils";
 import { useSidebar } from "./SidebarContext";
-import { Progress } from "@/components/ui/Progress";
+import { Progress }   from "@/components/ui/Progress";
+import { MOCK_USER }  from "@/lib/mockData";
 
-// ── Navigation structure ─────────────────────────────────
 const NAV_GROUPS = [
   {
     label: "Learn",
     items: [
-      { label: "Dashboard",  href: "/dashboard",  icon: LayoutDashboard },
-      { label: "Learn",      href: "/learn",       icon: BookOpen         },
-      { label: "Roadmap",    href: "/roadmap",     icon: Map              },
-      { label: "Challenges", href: "/challenges",  icon: Code2            },
-      { label: "Projects",   href: "/projects",    icon: FolderKanban     },
+      { label: "Dashboard",    href: "/dashboard",    icon: LayoutDashboard },
+      { label: "Learn",        href: "/learn",         icon: BookOpen         },
+      { label: "Roadmap",      href: "/roadmap",       icon: Map              },
+      { label: "Challenges",   href: "/challenges",    icon: Code2            },
+      { label: "Projects",     href: "/projects",      icon: FolderKanban     },
+      { label: "Infographics", href: "/infographics",  icon: BarChart2        },
+      { label: "Code System",  href: "/code-system",   icon: Code2            },
+      { label: "Animations",   href: "/animations",    icon: Zap              },
     ],
   },
   {
     label: "Community",
     items: [
-      { label: "Infographics",href: "/infographics",icon: BarChart2 },
-      { label: "Code System",  href: "/code-system",  icon: Code2     },
-      { label: "Animations",   href: "/animations",  icon: Zap       },
-      { label: "Community",  href: "/community",  icon: Users    },
+      { label: "Community",    href: "/community",     icon: Users    },
     ],
   },
   {
     label: "Account",
     items: [
-      { label: "Settings",   href: "/settings",   icon: Settings },
+      { label: "Settings",     href: "/settings",      icon: Settings },
     ],
   },
 ];
 
-// ── Sidebar width tokens ─────────────────────────────────
-const SIDEBAR_EXPANDED  = 256; // px
-const SIDEBAR_COLLAPSED = 68;  // px
+const SIDEBAR_EXPANDED  = 256;
+const SIDEBAR_COLLAPSED = 68;
+
+// Derive progress values from MOCK_USER (no hardcoding)
+const xpPercent     = MOCK_USER.xpToNext > 0
+  ? Math.round((MOCK_USER.xp / MOCK_USER.xpToNext) * 100)
+  : 0;
 
 export function Sidebar() {
   const { isCollapsed, toggleCollapsed, isMobileOpen, closeMobile } = useSidebar();
@@ -75,7 +58,7 @@ export function Sidebar() {
 
   return (
     <>
-      {/* ── Mobile backdrop ──────────────────────────── */}
+      {/* Mobile backdrop */}
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
@@ -91,49 +74,28 @@ export function Sidebar() {
         )}
       </AnimatePresence>
 
-      {/* ── Sidebar panel ────────────────────────────── */}
-      {/* Desktop: always visible, width animates */}
-      {/* Mobile: off-canvas, translateX animates      */}
+      {/* Sidebar panel */}
       <motion.aside
-        animate={{
-          width: isCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_EXPANDED,
-          x: 0,
-        }}
+        animate={{ width: isCollapsed ? SIDEBAR_COLLAPSED : SIDEBAR_EXPANDED, x: 0 }}
         initial={false}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         className={cn(
-          // Positioning
           "fixed top-0 left-0 z-50 h-dvh flex flex-col",
-          // Visual
-          "bg-surface border-r border-surface-border",
-          "overflow-hidden select-none",
-          // Mobile: off-canvas until open
+          "bg-surface border-r border-surface-border overflow-hidden select-none",
           "-translate-x-full lg:translate-x-0",
           isMobileOpen && "translate-x-0"
         )}
-        style={{
-          // On mobile, always show full width when open
-          width: isMobileOpen ? SIDEBAR_EXPANDED : undefined,
-        }}
+        style={{ width: isMobileOpen ? SIDEBAR_EXPANDED : undefined }}
       >
-        {/* ── Logo / Wordmark ───────────────────────── */}
-        <div
-          className={cn(
-            "flex items-center h-16 px-4 border-b border-surface-border shrink-0",
-            isCollapsed ? "justify-center" : "justify-between"
-          )}
-        >
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-2.5 min-w-0"
-            onClick={closeMobile}
-          >
-            {/* Logo mark — always visible */}
+        {/* Logo */}
+        <div className={cn(
+          "flex items-center h-16 px-4 border-b border-surface-border shrink-0",
+          isCollapsed ? "justify-center" : "justify-between"
+        )}>
+          <Link href="/dashboard" className="flex items-center gap-2.5 min-w-0" onClick={closeMobile}>
             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-accent to-glow flex items-center justify-center shrink-0 shadow-glow-sm">
               <Zap className="w-4 h-4 text-white" fill="white" />
             </div>
-
-            {/* Wordmark — hidden when collapsed */}
             <AnimatePresence>
               {!isCollapsed && (
                 <motion.span
@@ -149,8 +111,6 @@ export function Sidebar() {
               )}
             </AnimatePresence>
           </Link>
-
-          {/* Mobile close button */}
           <button
             onClick={closeMobile}
             className="lg:hidden p-1.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-surface-raised transition-colors"
@@ -160,11 +120,10 @@ export function Sidebar() {
           </button>
         </div>
 
-        {/* ── Navigation ───────────────────────────── */}
+        {/* Nav */}
         <nav className="flex-1 overflow-y-auto overflow-x-hidden py-4 no-scrollbar">
           {NAV_GROUPS.map((group) => (
             <div key={group.label} className="mb-6">
-              {/* Group label */}
               <AnimatePresence>
                 {!isCollapsed && (
                   <motion.p
@@ -180,13 +139,11 @@ export function Sidebar() {
                 )}
               </AnimatePresence>
 
-              {/* Nav items */}
               <ul className="space-y-0.5 px-2">
                 {group.items.map(({ label, href, icon: Icon }) => {
-                  const isActive =
-                    href === "/dashboard"
-                      ? pathname === href
-                      : pathname.startsWith(href);
+                  const isActive = href === "/dashboard"
+                    ? pathname === href
+                    : pathname.startsWith(href);
 
                   return (
                     <li key={href}>
@@ -194,9 +151,8 @@ export function Sidebar() {
                         href={href}
                         onClick={closeMobile}
                         className={cn(
-                          "flex items-center gap-3 px-2.5 py-2 rounded-xl",
-                          "text-sm font-medium transition-all duration-200",
-                          "relative group",
+                          "flex items-center gap-3 px-2.5 py-2 rounded-xl text-sm font-medium",
+                          "transition-all duration-200 relative group",
                           isActive
                             ? "text-accent bg-accent/10 border border-accent/20"
                             : "text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-surface-raised",
@@ -204,23 +160,16 @@ export function Sidebar() {
                         )}
                         title={isCollapsed ? label : undefined}
                       >
-                        {/* Active indicator bar */}
                         {isActive && (
                           <motion.span
                             layoutId="active-nav"
                             className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-full bg-accent"
                           />
                         )}
-
-                        {/* Icon */}
-                        <Icon
-                          className={cn(
-                            "w-4 h-4 shrink-0 transition-colors",
-                            isActive ? "text-accent" : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text)]"
-                          )}
-                        />
-
-                        {/* Label */}
+                        <Icon className={cn(
+                          "w-4 h-4 shrink-0 transition-colors",
+                          isActive ? "text-accent" : "text-[var(--color-text-muted)] group-hover:text-[var(--color-text)]"
+                        )} />
                         <AnimatePresence>
                           {!isCollapsed && (
                             <motion.span
@@ -235,8 +184,6 @@ export function Sidebar() {
                             </motion.span>
                           )}
                         </AnimatePresence>
-
-                        {/* Tooltip on collapsed */}
                         {isCollapsed && (
                           <span className="absolute left-full ml-2 px-2 py-1 rounded-lg bg-surface-raised border border-surface-border text-xs font-medium text-[var(--color-text)] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
                             {label}
@@ -251,7 +198,7 @@ export function Sidebar() {
           ))}
         </nav>
 
-        {/* ── Overall Progress ─────────────────────── */}
+        {/* Progress strip — driven from MOCK_USER */}
         <AnimatePresence>
           {!isCollapsed && (
             <motion.div
@@ -266,26 +213,24 @@ export function Sidebar() {
                 <span className="text-xs font-semibold text-[var(--color-text)]">
                   Overall Progress
                 </span>
-                <span className="text-xs font-bold text-accent">0%</span>
+                <span className="text-xs font-bold text-accent">{xpPercent}%</span>
               </div>
-              <Progress value={0} size="xs" variant="accent" animated={false} />
+              <Progress value={xpPercent} size="xs" variant="accent" animated={false} />
               <p className="mt-2 text-[10px] text-[var(--color-text-muted)]">
-                0 of 20 modules complete
+                Level {MOCK_USER.level} · {MOCK_USER.xp} XP
               </p>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* ── User profile strip ───────────────────── */}
+        {/* User footer — driven from MOCK_USER */}
         <div className={cn(
           "flex items-center gap-3 p-3 border-t border-surface-border shrink-0",
           isCollapsed && "justify-center"
         )}>
-          {/* Avatar */}
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-glow flex items-center justify-center shrink-0 text-white text-xs font-bold">
-            JD
+            {MOCK_USER.initials}
           </div>
-
           <AnimatePresence>
             {!isCollapsed && (
               <motion.div
@@ -297,21 +242,27 @@ export function Sidebar() {
                 className="flex-1 min-w-0 overflow-hidden"
               >
                 <p className="text-sm font-semibold text-[var(--color-text)] truncate">
-                  John Dev
+                  {MOCK_USER.name}
                 </p>
                 <div className="flex items-center gap-2">
-                  <Flame className="w-3 h-3 text-orange-400" />
-                  <span className="text-[10px] text-[var(--color-text-muted)]">
-                    0 day streak
-                  </span>
+                  {MOCK_USER.streak > 0 ? (
+                    <>
+                      <Flame className="w-3 h-3 text-orange-400" />
+                      <span className="text-[10px] text-[var(--color-text-muted)]">
+                        {MOCK_USER.streak} day streak
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-[10px] text-[var(--color-text-muted)]">
+                      Day {MOCK_USER.joinedDays} — let&apos;s go!
+                    </span>
+                  )}
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
-
-          {/* XP badge */}
           <AnimatePresence>
-            {!isCollapsed && (
+            {!isCollapsed && MOCK_USER.xp > 0 && (
               <motion.div
                 key="xp"
                 initial={{ opacity: 0 }}
@@ -320,23 +271,21 @@ export function Sidebar() {
                 className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-yellow-400/10 border border-yellow-400/20"
               >
                 <Trophy className="w-3 h-3 text-yellow-400" />
-                <span className="text-[10px] font-bold text-yellow-400">0</span>
+                <span className="text-[10px] font-bold text-yellow-400">{MOCK_USER.xp}</span>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* ── Collapse toggle ── Desktop only ─────── */}
+        {/* Collapse toggle — desktop only */}
         <button
           onClick={toggleCollapsed}
           className={cn(
             "hidden lg:flex items-center justify-center",
-            "absolute -right-3 top-20",
-            "w-6 h-6 rounded-full",
+            "absolute -right-3 top-20 w-6 h-6 rounded-full",
             "bg-surface-card border border-surface-border",
             "text-[var(--color-text-muted)] hover:text-[var(--color-text)]",
-            "hover:bg-surface-raised transition-all duration-200",
-            "shadow-card z-10"
+            "hover:bg-surface-raised transition-all duration-200 shadow-card z-10"
           )}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >

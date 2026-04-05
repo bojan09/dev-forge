@@ -49,7 +49,7 @@ const cardVariants = cva(
         // Solid accent background — highlighted/active
         accent: [
           "bg-accent/10 border border-accent/20",
-          "hover:bg-accent/15",
+          "hover:bg-accent/20",
         ],
       },
       padding: {
@@ -176,8 +176,8 @@ export const CardBadge = forwardRef<
   React.HTMLAttributes<HTMLSpanElement> & { color?: "accent" | "glow" | "success" | "warning" }
 >(({ className, color = "accent", ...props }, ref) => {
   const colorMap = {
-    accent:  "bg-accent/15 text-accent border-accent/20",
-    glow:    "bg-glow/15 text-glow border-glow/20",
+    accent:  "bg-accent/20 text-accent border-accent/20",
+    glow:    "bg-glow/20 text-glow border-glow/20",
     success: "bg-emerald-400/10 text-emerald-400 border-emerald-400/20",
     warning: "bg-yellow-400/10 text-yellow-400 border-yellow-400/20",
   };

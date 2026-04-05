@@ -1,16 +1,12 @@
 "use client";
 
 // components/animations/LoadingStates.tsx
-// ─────────────────────────────────────────────────────────
-// ANIMATED LOADING STATES
-// Spinner, progress bar, pulsing skeleton, and full-screen
-// loading overlay — all using Framer Motion.
-// ─────────────────────────────────────────────────────────
+// Fixed: suppressHydrationWarning on SVG + dynamic circle elements
 
 import { motion } from "framer-motion";
 import { cn }     from "@/lib/utils";
 
-// ── Spinner — rotating ring ───────────────────────────────
+// ── Spinner ───────────────────────────────────────────────
 export function Spinner({
   size      = 20,
   color     = "#7B61FF",
@@ -33,8 +29,8 @@ export function Spinner({
       animate={{ rotate: 360 }}
       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
       className={cn("shrink-0", className)}
+      suppressHydrationWarning
     >
-      {/* Track */}
       <circle
         cx={size / 2}
         cy={size / 2}
@@ -42,8 +38,8 @@ export function Spinner({
         fill="none"
         stroke="rgba(255,255,255,0.1)"
         strokeWidth={thickness}
+        suppressHydrationWarning
       />
-      {/* Arc */}
       <circle
         cx={size / 2}
         cy={size / 2}
@@ -54,12 +50,13 @@ export function Spinner({
         strokeLinecap="round"
         strokeDasharray={`${circ * 0.75} ${circ * 0.25}`}
         style={{ transformOrigin: "center" }}
+        suppressHydrationWarning
       />
     </motion.svg>
   );
 }
 
-// ── DotsLoader — three bouncing dots ─────────────────────
+// ── DotsLoader ────────────────────────────────────────────
 export function DotsLoader({
   color     = "#7B61FF",
   className,
@@ -75,19 +72,14 @@ export function DotsLoader({
           className="w-1.5 h-1.5 rounded-full"
           style={{ backgroundColor: color }}
           animate={{ y: [0, -6, 0] }}
-          transition={{
-            duration: 0.6,
-            delay:    i * 0.12,
-            repeat:   Infinity,
-            ease:     "easeInOut",
-          }}
+          transition={{ duration: 0.6, delay: i * 0.12, repeat: Infinity, ease: "easeInOut" }}
         />
       ))}
     </div>
   );
 }
 
-// ── AnimatedProgressBar — smooth fill with label ──────────
+// ── AnimatedProgressBar ───────────────────────────────────
 export function AnimatedProgressBar({
   value,
   label,
@@ -95,7 +87,7 @@ export function AnimatedProgressBar({
   height  = 6,
   className,
 }: {
-  value:      number;   // 0–100
+  value:      number;
   label?:     string;
   color?:     string;
   height?:    number;
@@ -109,10 +101,7 @@ export function AnimatedProgressBar({
           <span className="font-semibold text-[var(--color-text)]">{Math.round(value)}%</span>
         </div>
       )}
-      <div
-        className="w-full rounded-full bg-surface-raised overflow-hidden"
-        style={{ height }}
-      >
+      <div className="w-full rounded-full bg-surface-raised overflow-hidden" style={{ height }}>
         <motion.div
           className="h-full rounded-full"
           style={{ background: color }}
@@ -125,11 +114,11 @@ export function AnimatedProgressBar({
   );
 }
 
-// ── PulseBox — pulsing placeholder block ─────────────────
+// ── PulseBox ──────────────────────────────────────────────
 export function PulseBox({
-  width     = "100%",
-  height    = 16,
-  rounded   = "rounded-lg",
+  width   = "100%",
+  height  = 16,
+  rounded = "rounded-lg",
   className,
 }: {
   width?:     string | number;
@@ -147,7 +136,7 @@ export function PulseBox({
   );
 }
 
-// ── PageLoader — full-screen loading overlay ──────────────
+// ── PageLoader ────────────────────────────────────────────
 export function PageLoader({ message = "Loading..." }: { message?: string }) {
   return (
     <motion.div

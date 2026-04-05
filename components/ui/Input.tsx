@@ -1,14 +1,12 @@
-// components/ui/Input.tsx
-// ─────────────────────────────────────────────────────────
-// INPUT COMPONENT
-// Variants: default, ghost, search
-// Supports: left/right adornments, error state, labels
-// ─────────────────────────────────────────────────────────
+"use client";
 
-import { forwardRef } from "react";
+// components/ui/Input.tsx
+// Fixed: replaced Math.random() ID generation with React useId()
+// Math.random() on server vs client produces different values = hydration crash
+
+import { forwardRef, useId } from "react";
 import { cn } from "@/lib/utils";
 
-// ── Base Input ───────────────────────────────────────────
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
@@ -17,6 +15,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   rightAdornment?: React.ReactNode;
   variant?: "default" | "ghost" | "search";
   fullWidth?: boolean;
+  className?: string;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -35,23 +34,19 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    const inputId = id ?? `input-${Math.random().toString(36).slice(2, 7)}`;
+    // useId() is stable across SSR and client — safe for hydration
+    const generatedId = useId();
+    const inputId     = id ?? generatedId;
 
     return (
       <div className={cn("flex flex-col gap-1.5", fullWidth && "w-full")}>
-        {/* Label */}
         {label && (
-          <label
-            htmlFor={inputId}
-            className="text-sm font-medium text-[var(--color-text)]"
-          >
+          <label htmlFor={inputId} className="text-sm font-medium text-[var(--color-text)]">
             {label}
           </label>
         )}
 
-        {/* Input wrapper */}
         <div className="relative">
-          {/* Left adornment */}
           {leftAdornment && (
             <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] [&>svg]:h-4 [&>svg]:w-4">
               {leftAdornment}
@@ -62,18 +57,16 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={cn(
-              // Base
               "w-full rounded-xl font-sans text-sm",
               "text-[var(--color-text)] placeholder:text-[var(--color-text-muted)]",
               "transition-all duration-200",
               "focus:outline-none focus:ring-2 focus:ring-accent/50",
               "disabled:opacity-50 disabled:cursor-not-allowed",
-              // Variant
               variant === "default" && [
                 "h-10 px-3",
                 "bg-surface-raised border border-surface-border",
                 "hover:border-surface-muted",
-                "focus:border-accent focus:ring-2",
+                "focus:border-accent",
               ],
               variant === "ghost" && [
                 "h-10 px-3",
@@ -86,17 +79,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 "hover:border-surface-muted",
                 "focus:border-accent",
               ],
-              // Adornments
               leftAdornment && variant !== "search" && "pl-9",
               rightAdornment && "pr-9",
-              // Error state
               error && "border-red-400/50 focus:ring-red-400/30",
               className
             )}
             {...props}
           />
 
-          {/* Right adornment */}
           {rightAdornment && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] [&>svg]:h-4 [&>svg]:w-4">
               {rightAdornment}
@@ -104,42 +94,31 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
 
-        {/* Error or hint text */}
-        {error && (
-          <p className="text-xs text-red-400 flex items-center gap-1">
-            <span>⚠</span> {error}
-          </p>
-        )}
-        {hint && !error && (
-          <p className="text-xs text-[var(--color-text-muted)]">{hint}</p>
-        )}
+        {error && <p className="text-xs text-red-400">⚠ {error}</p>}
+        {hint && !error && <p className="text-xs text-[var(--color-text-muted)]">{hint}</p>}
       </div>
     );
   }
 );
-
 Input.displayName = "Input";
 
-// ── Textarea ─────────────────────────────────────────────
-export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   error?: string;
   hint?: string;
   fullWidth?: boolean;
+  className?: string;
 }
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, label, error, hint, fullWidth = true, id, ...props }, ref) => {
-    const textareaId = id ?? `textarea-${Math.random().toString(36).slice(2, 7)}`;
+    const generatedId = useId();
+    const textareaId  = id ?? generatedId;
 
     return (
       <div className={cn("flex flex-col gap-1.5", fullWidth && "w-full")}>
         {label && (
-          <label
-            htmlFor={textareaId}
-            className="text-sm font-medium text-[var(--color-text)]"
-          >
+          <label htmlFor={textareaId} className="text-sm font-medium text-[var(--color-text)]">
             {label}
           </label>
         )}
@@ -160,12 +139,9 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           {...props}
         />
         {error && <p className="text-xs text-red-400">⚠ {error}</p>}
-        {hint && !error && (
-          <p className="text-xs text-[var(--color-text-muted)]">{hint}</p>
-        )}
+        {hint && !error && <p className="text-xs text-[var(--color-text-muted)]">{hint}</p>}
       </div>
     );
   }
 );
-
 Textarea.displayName = "Textarea";

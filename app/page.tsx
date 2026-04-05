@@ -64,7 +64,7 @@ export default function HomePage() {
       <main className="flex-1 flex flex-col items-center">
         {/* Ambient glows */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-accent/8 rounded-full blur-3xl" />
+          <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-3xl" />
           <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-glow/5 rounded-full blur-3xl" />
         </div>
 
@@ -206,7 +206,7 @@ export default function HomePage() {
       </main>
 
       <footer className="py-6 text-center text-xs text-[var(--color-text-muted)] border-t border-surface-border relative z-10">
-        © {new Date().getFullYear()} DevForge · Built with Next.js &amp; ☕
+        © <span suppressHydrationWarning>{new Date().getFullYear()}</span> DevForge · Built with Next.js &amp; ☕
       </footer>
     </div>
   );

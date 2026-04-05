@@ -1,31 +1,17 @@
 "use client";
 
 // components/animations/ScrollReveal.tsx
-// ─────────────────────────────────────────────────────────
-// SCROLL REVEAL COMPONENT
-// Wraps any content and animates it when it enters the viewport.
-// Uses Framer Motion's whileInView — no IntersectionObserver boilerplate.
-//
-// Usage:
-//   <ScrollReveal>
-//     <Card>...</Card>
-//   </ScrollReveal>
-//
-//   <ScrollReveal variant="fadeInLeft" delay={0.2}>
-//     <Paragraph>...</Paragraph>
-//   </ScrollReveal>
-// ─────────────────────────────────────────────────────────
+// Fixed: removed motion.div `as` prop (removed in framer-motion v11)
+// Solution: render a plain wrapper div and apply motion only to the inner element
 
 import { motion }    from "framer-motion";
 import { cn }        from "@/lib/utils";
 import {
   fadeIn, fadeInUp, fadeInDown, fadeInLeft, fadeInRight,
   scaleIn, scalePop,
-  type fadeIn as FadeInType, // just for doc
 } from "./motion";
 import type { Variants } from "framer-motion";
 
-// Named variant map — makes JSX props clean ("fadeInUp" string)
 const VARIANT_MAP: Record<string, Variants> = {
   fadeIn,
   fadeInUp,
@@ -39,44 +25,40 @@ const VARIANT_MAP: Record<string, Variants> = {
 export type RevealVariant = keyof typeof VARIANT_MAP;
 
 export interface ScrollRevealProps {
-  children:    React.ReactNode;
-  variant?:    RevealVariant;
-  delay?:      number;          // seconds
-  duration?:   number;          // overrides variant duration
-  once?:       boolean;         // animate once vs every re-entry
-  threshold?:  number;          // 0–1 viewport threshold
-  className?:  string;
-  as?:         "div" | "section" | "article" | "li" | "span";
+  children:   React.ReactNode;
+  variant?:   RevealVariant;
+  delay?:     number;
+  duration?:  number;
+  once?:      boolean;
+  threshold?: number;
+  className?: string;
 }
 
 export function ScrollReveal({
   children,
-  variant    = "fadeInUp",
-  delay      = 0,
+  variant   = "fadeInUp",
+  delay     = 0,
   duration,
-  once       = true,
-  threshold  = 0.1,
+  once      = true,
+  threshold = 0.1,
   className,
-  as: Tag    = "div",
 }: ScrollRevealProps) {
-  const variants = VARIANT_MAP[variant] ?? fadeInUp;
+  const baseVariants = VARIANT_MAP[variant] ?? fadeInUp;
 
-  // Allow per-instance duration override
-  const resolvedVariants: Variants = duration
+  const variants: Variants = duration
     ? {
-        hidden:  variants.hidden,
+        hidden:  baseVariants.hidden,
         visible: {
-          ...(variants.visible as Record<string, unknown>),
+          ...(baseVariants.visible as Record<string, unknown>),
           transition: { duration, ease: [0.0, 0.0, 0.2, 1.0] },
         },
       }
-    : variants;
+    : baseVariants;
 
+  // framer-motion v11: use motion.div only — no `as` prop
   return (
     <motion.div
-      // @ts-expect-error — polymorphic component typing is loose here intentionally
-      as={Tag}
-      variants={resolvedVariants}
+      variants={variants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once, amount: threshold }}

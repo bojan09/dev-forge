@@ -1,35 +1,39 @@
-// components/providers/QueryProvider.tsx
-// ─────────────────────────────────────────────────────────
-// TANSTACK QUERY PROVIDER
-// Wraps the app to enable server-state management
-// Configured with sensible defaults for a learning platform
-// ─────────────────────────────────────────────────────────
-
 "use client";
 
+// components/providers/QueryProvider.tsx
+// Fix: ReactQueryDevtools imported statically was crashing SSR with
+// "options.factory undefined" because the package accesses browser globals
+// (window, document) at module initialization time — before any component renders.
+// Solution: lazy-load it with next/dynamic + ssr:false so it NEVER enters
+// the server bundle. The conditional process.env check is NOT enough —
+// webpack still bundles the static import regardless of runtime conditions.
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
+import dynamic from "next/dynamic";
+
+// next/dynamic with ssr:false = excluded from server bundle entirely
+// This is the only way to prevent a browser-only module from crashing SSR
+const ReactQueryDevtools = dynamic(
+  () =>
+    import("@tanstack/react-query-devtools").then(
+      (mod) => mod.ReactQueryDevtools
+    ),
+  { ssr: false }
+);
 
 export function QueryProvider({ children }: { children: React.ReactNode }) {
-  // Create a stable QueryClient instance per component lifecycle
-  // Using useState ensures the client is created once per mount
   const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: {
           queries: {
-            // Data is considered fresh for 60 seconds
-            staleTime: 60 * 1000,
-            // Cache data for 5 minutes after unmount
-            gcTime: 5 * 60 * 1000,
-            // Retry failed requests twice
-            retry: 2,
-            // Don't refetch when window gains focus (learning content is stable)
+            staleTime:            60 * 1000,
+            gcTime:               5 * 60 * 1000,
+            retry:                2,
             refetchOnWindowFocus: false,
           },
           mutations: {
-            // Retry mutations once on failure
             retry: 1,
           },
         },
@@ -39,10 +43,7 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {/* Dev tools only visible in development */}
-      {process.env.NODE_ENV === "development" && (
-        <ReactQueryDevtools initialIsOpen={false} />
-      )}
+      {process.env.NODE_ENV === "development" && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }

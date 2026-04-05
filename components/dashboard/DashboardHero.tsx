@@ -34,7 +34,7 @@ export function DashboardHero() {
       className="relative overflow-hidden rounded-2xl border border-surface-border bg-surface-card"
     >
       {/* Ambient glows */}
-      <div className="absolute -top-20 -right-20 w-72 h-72 bg-accent/8 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-20 -right-20 w-72 h-72 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-glow/5 rounded-full blur-2xl pointer-events-none" />
 
       <div className="relative z-10 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">

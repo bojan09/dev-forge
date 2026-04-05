@@ -1,16 +1,8 @@
 "use client";
 
 // components/animations/MicroInteractions.tsx
-// ─────────────────────────────────────────────────────────
-// MICRO-INTERACTION COMPONENTS
-// Small, focused animation wrappers for interactive elements.
-//
-// HoverCard    — lift + shadow on hover (used on topic cards)
-// PulseRing    — animated ping ring (used on live indicators)
-// FloatBadge   — gentle floating animation (decorative badges)
-// Shimmer      — animated shine overlay (loading / new items)
-// PressTap     — press-down scale feedback on click
-// ─────────────────────────────────────────────────────────
+// Fixed: removed motion.div `as` prop — not supported in framer-motion v11
+// HoverCard now always renders motion.div (Tag prop removed)
 
 import { motion }    from "framer-motion";
 import { cn }        from "@/lib/utils";
@@ -20,9 +12,8 @@ import { cardHover, cardHoverSubtle, iconHover, iconTap } from "./motion";
 export interface HoverCardProps {
   children:    React.ReactNode;
   className?:  string;
-  subtle?:     boolean;   // smaller lift
-  glow?:       boolean;   // add glow shadow on hover
-  as?:         "div" | "article" | "li";
+  subtle?:     boolean;
+  glow?:       boolean;
 }
 
 export function HoverCard({
@@ -30,12 +21,9 @@ export function HoverCard({
   className,
   subtle = false,
   glow   = false,
-  as: Tag = "div",
 }: HoverCardProps) {
   return (
     <motion.div
-      // @ts-expect-error polymorphic
-      as={Tag}
       whileHover={subtle ? cardHoverSubtle : cardHover}
       className={cn(
         "transition-shadow duration-300",
@@ -68,7 +56,7 @@ export function PressTap({
   );
 }
 
-// ── IconButton — icon with bounce hover ──────────────────
+// ── AnimatedIcon — icon with bounce hover ─────────────────
 export function AnimatedIcon({
   children,
   className,
@@ -102,14 +90,12 @@ export function PulseRing({
       className={cn("relative inline-flex", className)}
       style={{ width: size, height: size }}
     >
-      {/* Ping animation ring */}
       <motion.span
-        className="absolute inset-0 rounded-full opacity-75"
+        className="absolute inset-0 rounded-full"
         style={{ backgroundColor: color }}
         animate={{ scale: [1, 2.4], opacity: [0.7, 0] }}
         transition={{ duration: 1.4, repeat: Infinity, ease: "easeOut" }}
       />
-      {/* Static dot */}
       <span
         className="relative rounded-full"
         style={{ width: size, height: size, backgroundColor: color }}
@@ -121,8 +107,8 @@ export function PulseRing({
 // ── FloatBadge — gentle floating animation ────────────────
 export function FloatBadge({
   children,
-  amplitude = 6,   // px up/down
-  period    = 3,   // seconds per cycle
+  amplitude = 6,
+  period    = 3,
   className,
 }: {
   children:   React.ReactNode;
@@ -142,7 +128,6 @@ export function FloatBadge({
 }
 
 // ── Shimmer — animated highlight overlay ─────────────────
-// Use over a card or image to show it's new / loading
 export function Shimmer({ className }: { className?: string }) {
   return (
     <div className={cn("relative overflow-hidden", className)}>
@@ -171,9 +156,7 @@ export function GlowText({
   return (
     <motion.span
       className={cn("gradient-text inline-block", className)}
-      animate={{
-        backgroundPosition: ["0% center", "200% center", "0% center"],
-      }}
+      animate={{ backgroundPosition: ["0% center", "200% center", "0% center"] }}
       transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
       style={{ backgroundSize: "200% auto" }}
     >

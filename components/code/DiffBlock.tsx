@@ -120,7 +120,7 @@ export function DiffBlock({ before, after, title, className }: DiffBlockProps) {
                   className={cn(
                     "flex items-start gap-3 px-2 -mx-2 rounded",
                     isChanged
-                      ? "bg-red-400/8 text-red-400"
+                      ? "bg-red-400/10 text-red-400"
                       : "text-[var(--color-text-muted)]"
                   )}
                 >
@@ -147,7 +147,7 @@ export function DiffBlock({ before, after, title, className }: DiffBlockProps) {
                   className={cn(
                     "flex items-start gap-3 px-2 -mx-2 rounded",
                     isChanged
-                      ? "bg-emerald-400/8 text-emerald-400"
+                      ? "bg-emerald-400/10 text-emerald-400"
                       : "text-[var(--color-text-muted)]"
                   )}
                 >

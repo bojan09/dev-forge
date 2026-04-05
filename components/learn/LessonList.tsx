@@ -72,7 +72,7 @@ export function LessonList({
               className={cn(
                 "w-full flex items-start gap-3 px-4 py-3.5 text-left",
                 "transition-all duration-200 group",
-                isActive    && "bg-accent/8 border-l-2 border-accent",
+                isActive    && "bg-accent/10 border-l-2 border-accent",
                 isCompleted && !isActive && "opacity-75",
                 isLocked    && "opacity-40 cursor-not-allowed",
                 !isActive && !isLocked && "hover:bg-surface-raised cursor-pointer"

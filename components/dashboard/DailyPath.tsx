@@ -55,7 +55,7 @@ export function DailyPath() {
               className={cn(
                 "flex items-center gap-3 p-3 rounded-xl cursor-pointer border transition-all duration-200 group",
                 item.done
-                  ? "bg-emerald-400/5 border-emerald-400/15 opacity-70"
+                  ? "bg-emerald-400/5 border-emerald-400/20 opacity-70"
                   : "bg-surface-raised border-surface-border hover:border-accent/30 hover:bg-accent/5"
               )}
             >

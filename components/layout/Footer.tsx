@@ -106,7 +106,7 @@ export function Footer() {
         {/* ── Bottom bar ───────────────────────────── */}
         <div className="py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-[var(--color-text-muted)]">
-            © {new Date().getFullYear()} DevForge. Built with Next.js &amp; ☕
+            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> DevForge. Built with Next.js &amp; ☕
           </p>
 
           <div className="flex items-center gap-4">
