@@ -6,13 +6,16 @@ import { BookOpen, Flame, Clock, Code2, type LucideIcon } from "lucide-react";
 import { MOCK_STATS } from "@/lib/mockData";
 import { cn } from "@/lib/utils";
 
-interface StatConfig { icon: LucideIcon; iconClass: string; }
+interface StatConfig {
+  icon: LucideIcon;
+  iconClass: string;
+}
 
 const STAT_CONFIG: StatConfig[] = [
-  { icon: BookOpen, iconClass: "bg-accent/10 text-accent"           },
-  { icon: Flame,    iconClass: "bg-orange-400/10 text-orange-400"   },
-  { icon: Clock,    iconClass: "bg-glow/10 text-glow"               },
-  { icon: Code2,    iconClass: "bg-emerald-400/10 text-emerald-400" },
+  { icon: BookOpen, iconClass: "bg-accent/10 text-accent" },
+  { icon: Flame, iconClass: "bg-orange-400/10 text-orange-400" },
+  { icon: Clock, iconClass: "bg-glow/10 text-glow" },
+  { icon: Code2, iconClass: "bg-emerald-400/10 text-emerald-400" },
 ];
 
 export function StatsStrip() {
@@ -28,16 +31,34 @@ export function StatsStrip() {
             transition={{ duration: 0.35, delay: i * 0.07, ease: "easeOut" }}
             className="glass-card p-5 flex items-start gap-4 hover:border-accent/20 transition-colors duration-300"
           >
-            <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", iconClass)}>
+            <div
+              className={cn(
+                "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
+                iconClass,
+              )}
+            >
               <Icon className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <p className="text-2xl font-display font-bold text-[var(--color-text)] leading-none">{stat.value}</p>
-              <p className="text-xs text-[var(--color-text-muted)] mt-1">{stat.label}</p>
-              <p className={cn("text-[10px] font-medium mt-1",
-                stat.trend === "up" ? "text-emerald-400" : "text-[var(--color-text-muted)]"
-              )}>
-                {stat.trend === "up" && "↑ "}{stat.sub}
+              <p className="text-2xl font-display font-bold text-[var(--color-text)] leading-none">
+                {stat.value}
+              </p>
+              <p className="text-xs text-[var(--color-text-muted)] mt-1">
+                {stat.label}
+              </p>
+              <p
+                className={cn(
+                  "text-[10px] font-medium mt-1",
+                  stat.trend === "up"
+                    ? "text-emerald-400"
+                    : stat.trend === "down"
+                      ? "text-red-400"
+                      : "text-[var(--color-text-muted)]",
+                )}
+              >
+                {stat.trend === "up" && "↑ "}
+                {stat.trend === "down" && "↓ "}
+                {stat.sub}
               </p>
             </div>
           </motion.div>
